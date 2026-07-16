@@ -1,23 +1,42 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  CircularProgress,
   Typography,
 } from "@mui/material";
+import { useActivities } from "../../../lib/hooks/useActivities";
 
 type Props = {
-  activity: Activity;
+  selectedActivity: Activity;
   cancelSelectActivity: () => void;
   openForm: (id: string) => void;
 };
 
 export default function ActivityDetail({
-  activity,
+  selectedActivity,
   cancelSelectActivity,
   openForm,
 }: Props) {
+  const { activities } = useActivities();
+  const activity = activities?.find((x) => x.id === selectedActivity.id);
+
+  if (!activities)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}>
+        <CircularProgress color="inherit" />
+      </Box>
+    );
+
   return (
     <Card>
       <CardMedia
