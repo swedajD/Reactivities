@@ -1,26 +1,26 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import ActivityCard from "./ActivityCard";
+import { useActivities } from "../../../lib/hooks/useActivities";
 
-type Props = {
-  activities: Activity[];
-  selectActivity: (id: string) => void;
-  deleteActivity: (id: string) => void;
-};
+export default function ActivityList() {
+  const { activities, isPending } = useActivities();
 
-export default function ActivityList({
-  activities,
-  selectActivity,
-  deleteActivity,
-}: Props) {
+  if (!activities || isPending)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}>
+        <CircularProgress color="inherit" />
+      </Box>
+    );
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       {activities.map((activity) => (
-        <ActivityCard
-          deleteActivity={deleteActivity}
-          key={activity.id}
-          activity={activity}
-          selectActivity={selectActivity}
-        />
+        <ActivityCard key={activity.id} activity={activity} />
       ))}
     </Box>
   );
